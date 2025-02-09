@@ -1,10 +1,13 @@
-import { Box, Typography } from "@mui/material";
-import Image from "next/image";
+import { ConnectButton } from '@/components/ConnectButton';
+import { Box, Stack, Typography } from '@mui/material';
 
 export default function Home() {
   return (
-    <Box display="flex" justifyContent="center">
-      <Typography variant="h1">Welcome to Jumper challenge!</Typography>
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="100vh">
+      <Stack spacing={3} alignItems="center">
+        <Typography variant="h1">Welcome to Jumper challenge!</Typography>
+        <ConnectButton />
+      </Stack>
     </Box>
   );
 }
