@@ -34,3 +34,15 @@ Ethereum-related projects are often targeted in attacks to steal users' assets. 
 ### Decision record
 
 While reading the [Wagmi documentation](https://wagmi.sh/react/guides/connect-wallet#third-party-libraries) I decided to use a third-party for the sake of speed and because I'm not familiar with ethereum wallet connection procedures. I picked AppKit because it is connected with WalletConnect, and I was curious to know more about the project.
+
+### Backend implementation
+
+Given that the project is half nextjs and half expressjs I attempted to follow both guides while keeping the structure of the project.
+
+Attempted to follow the reown guides:
+https://docs.reown.com/appkit/next/core/siwe
+https://docs.reown.com/appkit/react/core/installation
+
+git@github.com:reown-com/web-examples.git
+
+I started by implementing the backend while adjusting the interface but then I realized that maybe it wouldn't working with the frontend implementation, so I decided to adjust the frontend with the reown example first,

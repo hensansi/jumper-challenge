@@ -6,6 +6,7 @@ import { mainnet } from '@reown/appkit/networks';
 import React, { type ReactNode } from 'react';
 import { cookieToInitialState, WagmiProvider, type Config } from 'wagmi';
 import { projectId, wagmiAdapter } from '@/config/wagmi';
+import { createSIWE } from '@/clients/siwe';
 
 if (!process.env.NEXT_PUBLIC_APP_URL) {
   throw new Error('NEXT_PUBLIC_APP_URL is not defined');
@@ -14,9 +15,12 @@ if (!process.env.NEXT_PUBLIC_APP_URL) {
 // Set up queryClient
 const queryClient = new QueryClient();
 
+// Create a SIWE configuration object
+const siweConfig = createSIWE([mainnet]);
+
 // Set up metadata
 const metadata = {
-  name: 'jumper-challenge',
+  name: 'Jumper Challenge',
   description: 'AppKit Example',
   url: process.env.NEXT_PUBLIC_APP_URL, // origin must match your domain & subdomain
   icons: ['https://assets.reown.com/reown-profile-pic.png'],
@@ -26,11 +30,14 @@ const metadata = {
 const modal = createAppKit({
   adapters: [wagmiAdapter],
   projectId,
+  siweConfig,
   networks: [mainnet],
   defaultNetwork: mainnet,
   metadata: metadata,
   features: {
     analytics: true, // Optional - defaults to your Cloud configuration
+    email: false, // default to true
+    socials: false,
   },
 });
 
