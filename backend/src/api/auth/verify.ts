@@ -1,8 +1,8 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
+import { PrismaClient } from '@prisma/client';
 import { getAddressFromMessage, getChainIdFromMessage } from '@reown/appkit-siwe';
 import express, { Request, Response, Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { generateNonce } from 'siwe';
 import { createPublicClient, http } from 'viem';
 import { z } from 'zod';
 
@@ -11,12 +11,8 @@ import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse
 import { env } from '@/common/utils/envConfig';
 import { handleServiceResponse } from '@/common/utils/httpHandlers';
 
+const prisma = new PrismaClient();
 export const verifyRegistry = new OpenAPIRegistry();
-
-/* const requestSchema = z.object({
-  message: z.string(),
-  signature: z.string(),
-}); */
 
 // TODO: define the schema better
 const responseObjectSchema = z.object({ address: z.string(), chainId: z.number() });
@@ -28,7 +24,9 @@ export const authVerifyRouter: Router = (() => {
     method: 'post',
     path: '/verify',
     tags: ['Auth'],
-    /*     request: {
+    /*     
+    @TODO define post body
+    request: {
       body: {
         content: {
           'application/json': requestSchema,
@@ -42,8 +40,6 @@ export const authVerifyRouter: Router = (() => {
   });
 
   router.post('/', async (req: Request, res: Response) => {
-    console.log('/verify');
-
     try {
       if (!req.body.message) {
         return res.status(400).json({ error: 'SiweMessage is undefined' });
@@ -56,10 +52,11 @@ export const authVerifyRouter: Router = (() => {
       const publicClient = createPublicClient({
         transport: http(`https://rpc.walletconnect.org/v1/?chainId=${chainId}&projectId=${env.SIWE_SESSION_SECRET}`),
       });
+      const signature = req.body.signature;
       const isValid = await publicClient.verifyMessage({
         message,
         address,
-        signature: req.body.signature,
+        signature,
       });
       // end o view verifyMessage
 
@@ -76,12 +73,20 @@ export const authVerifyRouter: Router = (() => {
       if (isNaN(chainIdNumber)) {
         throw new Error('Invalid chainId');
       }
-
-      console.log({ address, chainId: chainIdNumber });
       // save the session with the address and chainId (SIWESession)
       req.session.siwe = { address, chainId: chainIdNumber };
+
+      await prisma.account.upsert({
+        where: {
+          address,
+        },
+        update: {}, // No updates if found
+        create: {
+          // Create this data if not found
+          address,
+        },
+      });
       req.session.save(() => {
-        console.log('here', { session: req.session });
         const serviceResponse = new ServiceResponse(
           ResponseStatus.Success,
           'Success',
@@ -91,13 +96,10 @@ export const authVerifyRouter: Router = (() => {
         handleServiceResponse(serviceResponse, res);
       });
     } catch (e) {
-      console.log('catch', e);
-
       // clean the session
       req.session.siwe = null;
       req.session.nonce = null;
       req.session.save(() => {
-        console.log(e.message);
         const serviceResponse = new ServiceResponse(ResponseStatus.Failed, 'e.message', null, StatusCodes.UNAUTHORIZED);
         handleServiceResponse(serviceResponse, res);
       });

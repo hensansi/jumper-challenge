@@ -29,7 +29,6 @@ export const authNonceRouter: Router = (() => {
       { nonce: generateNonce() },
       StatusCodes.OK
     );
-    console.log('/nonce');
     handleServiceResponse(serviceResponse, res);
   });
 

@@ -22,7 +22,6 @@ export const authSessionRouter: Router = (() => {
   });
 
   router.get('/', (req: Request, res: Response) => {
-    //console.log('req.session.siwe', req.session.siwe);
     const serviceResponse = new ServiceResponse(
       ResponseStatus.Success,
       'Success',
