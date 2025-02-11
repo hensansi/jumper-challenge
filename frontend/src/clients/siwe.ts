@@ -35,9 +35,9 @@ const getNonce = async (): Promise<string> => {
   if (!res.ok) {
     throw new Error('Network response was not ok');
   }
-  const nonce = await res.text();
-  console.log('Nonce:', nonce);
-  return nonce;
+  // @TODO: share types between frontend and backend or keep it somehow in sync
+  const data: { responseObject: { nonce: string } } = await res.json();
+  return data.responseObject.nonce;
 };
 
 // call the server to verify the message
@@ -59,7 +59,7 @@ const verifyMessage = async ({ message, signature }: SIWEVerifyMessageArgs) => {
     }
 
     const result = await response.json();
-    return result === true;
+    return result.success === true;
   } catch (error) {
     return false;
   }
@@ -96,7 +96,7 @@ const signOut = async (): Promise<boolean> => {
   }
 
   const data = await res.json();
-  return data == '{}';
+  return data.success;
 };
 
 export const createSIWE = (chains: [AppKitNetwork, ...AppKitNetwork[]]) => {

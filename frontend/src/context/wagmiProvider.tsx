@@ -18,6 +18,7 @@ const queryClient = new QueryClient();
 // Create a SIWE configuration object
 const siweConfig = createSIWE([mainnet]);
 
+// @TODO: run the frontend without the backend and display an error message
 // Set up metadata
 const metadata = {
   name: 'Jumper Challenge',
