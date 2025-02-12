@@ -21,13 +21,9 @@ export const authSessionRouter: Router = (() => {
     responses: createApiResponse(z.null(), 'Return the siwe session'),
   });
 
+  // return session
   router.get('/', (req: Request, res: Response) => {
-    const serviceResponse = new ServiceResponse(
-      ResponseStatus.Success,
-      'Success',
-      { session: req.session },
-      StatusCodes.OK
-    );
+    const serviceResponse = new ServiceResponse(ResponseStatus.Success, 'Success', req.session.siwe, StatusCodes.OK);
     handleServiceResponse(serviceResponse, res);
   });
 

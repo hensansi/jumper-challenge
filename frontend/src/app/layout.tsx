@@ -3,8 +3,10 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../theme';
-import ContextProvider from '@/context/wagmiProvider';
+import AppKitProvider from '@/context/appkitProvider';
 import { headers } from 'next/headers';
+import { cookieToInitialState } from 'wagmi';
+import { wagmiAdapter } from '@/config/wagmi';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,13 +20,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookies = headers().get('cookie');
+  const initialState = cookieToInitialState(wagmiAdapter.wagmiConfig, headers().get('cookie'));
   return (
     <html lang="en">
       <body className={inter.className}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
-            <ContextProvider cookies={cookies}>{children}</ContextProvider>
+            <AppKitProvider initialState={initialState}>{children}</AppKitProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>
       </body>

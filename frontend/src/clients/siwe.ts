@@ -80,9 +80,7 @@ const getSession = async () => {
 
   const data = await res.json();
 
-  const isValidData = typeof data === 'object' && typeof data.address === 'string' && typeof data.chainId === 'number';
-
-  return isValidData ? (data as SIWESession) : null;
+  return data.success ? (data.responseObject as SIWESession) : null;
 };
 
 // call the server to sign out

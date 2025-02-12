@@ -3,7 +3,7 @@
 export const ConnectButton = () => {
   return (
     <div>
-      <appkit-button />
+      <appkit-connect-button />
     </div>
   );
 };

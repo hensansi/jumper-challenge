@@ -1,3 +1,4 @@
+// https://docs.reown.com/appkit/next/core/installation#wagmi-config
 import { cookieStorage, createStorage, http } from '@wagmi/core';
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { mainnet } from '@reown/appkit/networks';
