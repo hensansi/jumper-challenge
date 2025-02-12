@@ -1,4 +1,6 @@
 import { ConnectButton } from '@/components/ConnectButton';
+import TokenList from '@/components/TokenList';
+
 import { Box, Stack, Typography } from '@mui/material';
 
 export default function Home() {
@@ -7,6 +9,7 @@ export default function Home() {
       <Stack spacing={3} alignItems="center">
         <Typography variant="h1">Welcome to Jumper challenge!</Typography>
         <ConnectButton />
+        <TokenList />
       </Stack>
     </Box>
   );
