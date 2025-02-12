@@ -12,4 +12,5 @@ export const env = cleanEnv(process.env, {
   COMMON_RATE_LIMIT_WINDOW_MS: num({ devDefault: testOnly(1000) }),
   SIWE_SESSION_SECRET: str({ devDefault: testOnly('test') }),
   REOWN_PROJECT_ID: str(),
+  ALCHEMY_API_JEY: str(),
 });

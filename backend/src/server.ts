@@ -11,6 +11,7 @@ import rateLimiter from '@/common/middleware/rateLimiter';
 import requestLogger from '@/common/middleware/requestLogger';
 import { env } from '@/common/utils/envConfig';
 
+import { tokenListRouter } from './api/address/tokenList';
 import { authNonceRouter } from './api/auth/nonce';
 import { authSessionRouter } from './api/auth/session';
 import { authSignoutRouter } from './api/auth/signout';
@@ -48,6 +49,9 @@ app.use('/nonce', authNonceRouter);
 app.use('/session', authSessionRouter);
 app.use('/verify', authVerifyRouter);
 app.use('/signout', authSignoutRouter);
+
+// Address
+app.use('/address/:walletAddress/token-list', tokenListRouter);
 
 // Swagger UI
 app.use(openAPIRouter);
