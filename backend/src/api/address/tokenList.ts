@@ -7,7 +7,7 @@ import { createApiResponse } from '@/api-docs/openAPIResponseBuilders';
 import { ResponseStatus, ServiceResponse } from '@/common/models/serviceResponse';
 import { handleServiceResponse } from '@/common/utils/httpHandlers';
 
-import { getTokenBalances } from './util';
+import { getTokenBalances, getTokenMetadata, processedTokensBalances } from './util';
 
 export const tokenListRegistry = new OpenAPIRegistry();
 
@@ -26,7 +26,17 @@ export const tokenListRouter: Router = (() => {
     const walletAddress = req.params.walletAddress;
     const tokenList = await getTokenBalances(walletAddress);
 
-    const serviceResponse = new ServiceResponse(ResponseStatus.Success, 'Success', tokenList, StatusCodes.OK);
+    const metadataList = await Promise.all(
+      tokenList.map(async (token) => {
+        const metadata = await getTokenMetadata(token.contractAddress);
+        return [token.contractAddress, metadata];
+      })
+    );
+
+    const metadataMap = Object.fromEntries(metadataList);
+    const processedBalances = processedTokensBalances(tokenList, metadataMap);
+
+    const serviceResponse = new ServiceResponse(ResponseStatus.Success, 'Success', processedBalances, StatusCodes.OK);
     handleServiceResponse(serviceResponse, res);
   });
 
