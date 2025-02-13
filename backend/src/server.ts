@@ -34,7 +34,7 @@ app.use(
     secret: env.SIWE_SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    cookie: { secure: false, sameSite: true },
+    cookie: { secure: false, sameSite: 'lax' },
   })
 );
 

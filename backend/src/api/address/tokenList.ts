@@ -34,9 +34,9 @@ export const tokenListRouter: Router = (() => {
     );
 
     const metadataMap = Object.fromEntries(metadataList);
-    const processedBalances = processedTokensBalances(tokenList, metadataMap);
+    const tokenBalances = processedTokensBalances(tokenList, metadataMap);
 
-    const serviceResponse = new ServiceResponse(ResponseStatus.Success, 'Success', processedBalances, StatusCodes.OK);
+    const serviceResponse = new ServiceResponse(ResponseStatus.Success, 'Success', { tokenBalances }, StatusCodes.OK);
     handleServiceResponse(serviceResponse, res);
   });
 

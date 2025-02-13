@@ -13,6 +13,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "format": "prettier --config .prettierrc --write .",
+    "prisma": "prisma",
     "test": "vitest run",
     "test:dev": "vitest dev",
     "test:cov": "vitest run --coverage"

@@ -80,6 +80,7 @@ const getSession = async () => {
 
   const data = await res.json();
 
+  console.log(data);
   return data.success ? (data.responseObject as SIWESession) : null;
 };
 
