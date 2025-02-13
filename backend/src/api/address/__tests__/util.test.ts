@@ -4,7 +4,7 @@ import { processedTokensBalances } from '../util';
 
 describe('Token Utils', () => {
   describe('processedTokensBalances', () => {
-    it('should return processed balance', async () => {
+    it('should return a valid processed balance', async () => {
       // Arrange
       const expectedResponse = [
         {
@@ -35,5 +35,28 @@ describe('Token Utils', () => {
       // Assert
       expect(processedBalances).toEqual(expectedResponse);
     });
+
+    it('should return an empty response on invalid metadata', async () => {
+      // Arrange
+      const expectedResponse: [] = [];
+
+      // Act
+      const balances: TokenBalance[] = [
+        {
+          contractAddress: '0x6ff539f688aa8338807c0e5b2f466c43c97a0b91',
+          tokenBalance: '0x000000000000000000000000000000000000000000000021126c08b5ea8f0000',
+          error: null,
+        },
+      ];
+      const metadata = {
+        '0x6ff539f688aa8338807c0e5b2f466c43c97a0b91': { decimals: 0, logo: null, name: '', symbol: '' },
+      };
+      const processedBalances = processedTokensBalances(balances, metadata);
+
+      // Assert
+      expect(processedBalances).toEqual(expectedResponse);
+    });
   });
 });
+
+// '0x6ff539f688aa8338807c0e5b2f466c43c97a0b91': { decimals: 0, logo: null, name: '', symbol: '' },

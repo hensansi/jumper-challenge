@@ -34,22 +34,20 @@ export const processedTokensBalances = (
   balances: TokenBalance[],
   contractAddressMetadata: Record<string, TokenMetadataResponse>
 ) => {
-  return balances.map((token) => {
-    const metadata = contractAddressMetadata[token.contractAddress];
+  return balances
+    .map((token) => {
+      const metadata = contractAddressMetadata[token.contractAddress];
 
-    if (token.tokenBalance && metadata.decimals) {
-      const balance = new Decimal(token.tokenBalance).div(new Decimal(10).pow(metadata.decimals)).toNumber();
-      return {
-        name: metadata.name,
-        balance,
-        symbol: metadata.symbol,
-      };
-    }
+      if (token.tokenBalance && metadata.decimals) {
+        const balance = new Decimal(token.tokenBalance).div(new Decimal(10).pow(metadata.decimals)).toNumber();
+        return {
+          name: metadata.name,
+          balance,
+          symbol: metadata.symbol,
+        };
+      }
 
-    return {
-      name: metadata.name,
-      balance: 0,
-      symbol: metadata.symbol,
-    };
-  });
+      return null;
+    })
+    .filter((v) => !!v);
 };
